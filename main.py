@@ -1,13 +1,14 @@
 import sys
-sys.path.insert(0, 'Datos/')
-from graph import graph, number_nodes
+sys.path.insert(0, 'data/')
+from global_variables import graph, number_nodes
 
 from dijkstra import dijkstra
 
 def main():
     
-    # dijkstral = dijkstra(35, graph, number_nodes, True)
-    # dijkstral.run()
-    print("Javier")
+    dijkstral = dijkstra()
+    dijkstral.run(35, graph, True)
+    print(dijkstral.run(35, graph, True))
+    # dijkstral.print_last_result_table()
     
 main()

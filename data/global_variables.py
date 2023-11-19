@@ -1,3 +1,4 @@
+# Grafo original
 graph = {
     0 : {1:1, 6:1},
     1 : {0:1, 2:1, 7:2},
@@ -38,3 +39,21 @@ graph = {
 }
 
 number_nodes = 36
+
+# Info. Javier
+house_javier = 7
+weight1_javier = 5
+weight2_javier = 7
+weight3_javier = 10
+
+# Info. Andreina
+house_andreina = 20
+weight1_andreina = 7
+weight2_andreina = 9
+weight3_andreina = 12
+
+# Info. Lugares
+DTD = {"name": "Discoteca The Darkness", "node": 11}
+BLP = {"name": "Bar La Pasión", "node": 31}
+CMR = {"name": "Cervecería Mi Rolita", "node": 33}
+CF = {"name": "Café Sensación", "node": 35}
