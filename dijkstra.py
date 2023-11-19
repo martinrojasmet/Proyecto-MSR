@@ -1,6 +1,6 @@
 import sys
 sys.path.insert(0, 'data/')
-from global_variables import number_nodes, house_javier, house_andreina, weight1_javier, weight2_javier, weight3_javier, weight1_andreina, weight2_andreina, weight3_andreina
+from global_variables import number_nodes, house_javier, house_andreina, weight1_javier, weight2_javier, weight3_javier, weight1_andreina, weight2_andreina, weight3_andreina, weight4
 
 class dijkstra():
 
@@ -31,6 +31,8 @@ class dijkstra():
             result = weight2
         elif weight == 3:
             result = weight3
+        else:
+            result = weight4
         return result
 
     # Imprimir la tabla de resultados
@@ -38,8 +40,18 @@ class dijkstra():
         for node in self.last_result_table:
             print(node, self.last_result_table[node])
 
+    # Obtener el camino de un nodo a otro
+    def get_path(self, result_table, destination):
+        path = []
+        temp_node = result_table[destination]
+        path.append((destination, temp_node["cost"]))
+        while temp_node["before"] != "":
+            path.append((temp_node["before"], temp_node["cost"]))
+            temp_node = result_table[temp_node["before"]]
+        return path[::-1]
+        
     # Ejecutar el algoritmo de Dijkstra
-    def run(self, destination, graph, is_javier):
+    def run(self, graph, is_javier):
         result_table = {}
         visited_nodes = []
         if is_javier:

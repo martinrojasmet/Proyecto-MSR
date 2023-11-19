@@ -52,6 +52,8 @@ weight1_andreina = 7
 weight2_andreina = 9
 weight3_andreina = 12
 
+weight4 = 1005
+
 # Info. Lugares
 DTD = {"name": "Discoteca The Darkness", "node": 11}
 BLP = {"name": "Bar La Pasión", "node": 31}
