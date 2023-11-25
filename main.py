@@ -6,6 +6,8 @@ from testing import modified_graph
 
 from dijkstra import dijkstra
 
+from logic import logic
+
 def main():
     
     dijkstral = dijkstra()
@@ -14,7 +16,8 @@ def main():
     # print("")
     # print(dijkstral.run(modified_graph, False))
 
-    print(dijkstral.get_path(dijkstral.run(graph, True), 31))
+    log = logic()
+    log.run()
 
     # dijkstral.get_path(dijkstral.run(graph, True), 31)
     # dijkstral.print_last_result_table()

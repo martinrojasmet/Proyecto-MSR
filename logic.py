@@ -1,5 +1,5 @@
 import sys
-sys.path.insert(0, 'Datos/')
+sys.path.insert(0, 'data/')
 from global_variables import graph, number_nodes, house_javier, weight1_javier, weight2_javier, weight3_javier, house_andreina, weight1_andreina, weight2_andreina, weight3_andreina, DTD, BLP, CMR, CF
 
 from dijkstra import dijkstra
@@ -36,6 +36,25 @@ class logic:
                 for node in result_dijkstra[1]:
                     result_dijkstra[1][node]["cost"] += time_difference
 
+    # Encontrar los que chocan
+    def get_repeated_nodes(self, path_javier, path_andreina):
+        repeated_nodes_javier = []
+        repeated_nodes_andreina = []
+        for node in path_javier:
+            for node2 in path_andreina:
+                if node[0] == node2[0]:
+                    repeated_nodes_javier.append(node)
+                    repeated_nodes_andreina.append(node2)
+
+        return (repeated_nodes_javier, repeated_nodes_andreina)
+
+    # Verificar si chocan
+    def check_if_they_crash(self, repeated_nodes_javier, repeated_nodes_andreina):
+        return 1
+        # 
+        # Aqui se debe verificar si chocan
+        # 
+                        
     def run(self):
         table_for_places_to_visit = []
         # Guardar el lugar con el menor costo (guardando el mayor costo y el que lo tiene) [numero de nodo, es javier, costo]
@@ -64,8 +83,9 @@ class logic:
         self.fix_time_difference(time_difference, is_javier, result_dijkstra)
         
         # Encontrar si chocan
+        path_javier = self.dijkstra.get_path(result_dijkstra[0], lowest_cost_place[0])
+        path_andreina = self.dijkstra.get_path(result_dijkstra[1], lowest_cost_place[0])
 
-        
-        
-        print("Hello world")
-        
+        repeated_nodes_javier, repeated_nodes_andreina = self.get_repeated_nodes(path_javier, path_andreina)
+
+             

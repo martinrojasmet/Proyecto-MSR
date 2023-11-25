@@ -43,11 +43,11 @@ class dijkstra():
     # Obtener el camino de un nodo a otro
     def get_path(self, result_table, destination):
         path = []
-        temp_node = result_table[destination]
-        path.append((destination, temp_node["cost"]))
-        while temp_node["before"] != "":
-            path.append((temp_node["before"], temp_node["cost"]))
-            temp_node = result_table[temp_node["before"]]
+        path.append((destination, result_table[destination]["cost"]))
+        destination = result_table[destination]["before"]
+        while destination != "":
+            path.append((destination, result_table[destination]["cost"]))
+            destination = result_table[destination]["before"]
         return path[::-1]
         
     # Ejecutar el algoritmo de Dijkstra
