@@ -46,7 +46,7 @@ class CanvasPrincipal(customtkinter.CTkCanvas):
                 self.counter = self.counter + 1
 
         self.javier = self.create_aa_circle(self.get_row_position(1), self.get_column_position(1), 30, fill="blue", tags="javier")
-        self.andreina = self.create_aa_circle(self.get_row_position(2), self.get_column_position(2), 30, fill="pink", tags="andreina")
+        self.andreina = self.create_aa_circle(self.get_row_position(2), self.get_column_position(3), 30, fill="pink", tags="andreina")
     
     def get_row_position(self, index):
         return self.startWidth + (index * self.widthIncrement)
