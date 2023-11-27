@@ -148,4 +148,52 @@ class logic:
         print(self.result_path_andreina)
         print(self.result_time_difference)
 
-             
+    def get_shortest_path(self, node_number):
+        result_dijkstra = (self.dijkstra.run(graph, True), self.dijkstra.run(graph, False))
+
+        # Encontrar la diferencia de tiempo entre el recorrido de Javier y Andreina
+        time_difference, is_javier = self.get_difference_time(result_dijkstra[0], result_dijkstra[1], node_number)
+
+        # Corregir el tiempo de Andreina o Javier si es necesario
+        self.fix_time_difference(time_difference, is_javier, result_dijkstra)
+        
+        # Encontrar si chocan
+        path_javier = self.dijkstra.get_path(result_dijkstra[0], node_number)
+        path_andreina = self.dijkstra.get_path(result_dijkstra[1], node_number)
+
+        # Añadir el camino de Javier y Andreina a los resultados
+        self.result_path_javier = path_javier
+        self.result_path_andreina = path_andreina
+
+        repeated_nodes_javier, repeated_nodes_andreina = self.get_repeated_nodes(path_javier, path_andreina)
+
+        crash_first, crash_second = self.check_if_they_crash(repeated_nodes_javier, repeated_nodes_andreina)
+
+        # Cambiar el recorrido del que tenga menor costo
+        new_result_dijkstra = None
+        if crash_first != -1:
+            modified_graph = graph
+            modified_graph[crash_first][crash_second] = 4
+            if is_javier:
+                new_result_dijkstra = self.dijkstra.run(modified_graph, True)
+            else:
+                new_result_dijkstra = self.dijkstra.run(modified_graph, False)
+
+        # Arreglar los tiempos de nuevo
+        if new_result_dijkstra != None:
+            if is_javier:
+                time_difference, is_javier = self.get_difference_time(new_result_dijkstra, result_dijkstra[1], node_number)
+                for node in new_result_dijkstra:
+                    new_result_dijkstra[node]["cost"] += time_difference
+                self.result_path_javier = self.dijkstra.get_path(new_result_dijkstra, node_number)
+            else:
+                time_difference, is_javier = self.get_difference_time(result_dijkstra[0], new_result_dijkstra, node_number)
+                for node in new_result_dijkstra:
+                    new_result_dijkstra[node]["cost"] += time_difference
+                self.result_path_andreina = self.dijkstra.get_path(new_result_dijkstra, node_number)
+
+        self.result_node = node_number
+        self.result_time_difference = [time_difference, is_javier]
+
+        print(self.result_path_javier)
+        print(self.result_path_andreina)
