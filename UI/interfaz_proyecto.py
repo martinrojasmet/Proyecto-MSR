@@ -46,7 +46,7 @@ class CanvasPrincipal(customtkinter.CTkCanvas):
                 self.counter = self.counter + 1
 
         self.javier = self.create_aa_circle(self.get_row_position(1), self.get_column_position(1), 30, fill="blue", tags="javier")
-        self.andreina = self.create_aa_circle(self.get_row_position(2), self.get_column_position(2), 30, fill="pink")
+        self.andreina = self.create_aa_circle(self.get_row_position(2), self.get_column_position(2), 30, fill="pink", tags="andreina")
     
     def get_row_position(self, index):
         return self.startWidth + (index * self.widthIncrement)
@@ -147,10 +147,12 @@ class CanvasPrincipal(customtkinter.CTkCanvas):
                     self.after(1000, self.movement2)
         else:
             self.after_cancel(self.movement2)
-            
-
-    def stop_javier(self):
-        self.after_cancel(self.movement1)
+    
+    def reset_ui(self):
+        self.delete("javier")
+        self.delete("andreina")
+        self.javier = self.create_aa_circle(self.get_row_position(1), self.get_column_position(1), 30, fill="blue", tags="javier")
+        self.andreina = self.create_aa_circle(self.get_row_position(2), self.get_column_position(2), 30, fill="pink", tags="andreina")
 
 
 class PantallaPrincipal(customtkinter.CTk):
@@ -186,17 +188,18 @@ class PantallaPrincipal(customtkinter.CTk):
         self.start_button.grid(row=2, column=2, padx=10, pady=10, sticky="nse")
 
     def empezar_callback(self):
-        # estos son unos caaminos dummy, falta conectar con dijkstra
+        
         camino_javier = [(7,0),(13,7),(19,10),(25,16)]
         camino_andreina = [(14,0),(20,7),(21,16),(27,23),(33,32)]
+
         self.canvas_frame.andreina_movement = camino_andreina
         self.canvas_frame.javier_movement = camino_javier
         self.canvas_frame.movement2()
         self.canvas_frame.movement1()
-        
     
     def reiniciar_callback(self):
-        print("TODO")
+        self.canvas_frame.reset_ui()
+
 
     def new_destiny_callback(self):
         print("TODO")
