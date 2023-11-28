@@ -1,5 +1,10 @@
 import customtkinter
 
+from logic import logic
+
+
+log = logic()
+
 class DropdownList(customtkinter.CTkFrame):
     def __init__(self, master, titulo, destinos):
         super().__init__(master)
@@ -13,6 +18,9 @@ class DropdownList(customtkinter.CTkFrame):
         self.combobox = customtkinter.CTkComboBox(self, values=destinos)
         self.combobox.set(destinos[0])
         self.combobox.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
+    
+    def get_selected_destiny(self):
+        return self.combobox.get()
 
 class CanvasPrincipal(customtkinter.CTkCanvas):
     def __init__(self, master):
@@ -46,7 +54,7 @@ class CanvasPrincipal(customtkinter.CTkCanvas):
                 self.counter = self.counter + 1
 
         self.javier = self.create_aa_circle(self.get_row_position(1), self.get_column_position(1), 30, fill="blue", tags="javier")
-        self.andreina = self.create_aa_circle(self.get_row_position(2), self.get_column_position(2), 30, fill="pink")
+        self.andreina = self.create_aa_circle(self.get_row_position(2), self.get_column_position(3), 30, fill="pink", tags="andreina")
     
     def get_row_position(self, index):
         return self.startWidth + (index * self.widthIncrement)
@@ -147,13 +155,23 @@ class CanvasPrincipal(customtkinter.CTkCanvas):
                     self.after(1000, self.movement2)
         else:
             self.after_cancel(self.movement2)
-            
-
-    def stop_javier(self):
-        self.after_cancel(self.movement1)
+    
+    def reset_ui(self):
+        self.delete("javier")
+        self.delete("andreina")
+        self.javier = self.create_aa_circle(self.get_row_position(1), self.get_column_position(1), 30, fill="blue", tags="javier")
+        self.andreina = self.create_aa_circle(self.get_row_position(2), self.get_column_position(2), 30, fill="pink", tags="andreina")
 
 
 class PantallaPrincipal(customtkinter.CTk):
+
+    diccionario = {
+        "Discoteca The Darkness": 10,
+        "Bar La Pasión": 31,
+        "Cervecería Mi Rolita": 33,
+        "Café Sensación": 35
+    }
+
     def __init__(self):
         super().__init__()
 
@@ -174,8 +192,11 @@ class PantallaPrincipal(customtkinter.CTk):
         self.canvas_frame = CanvasPrincipal(self)
         self.canvas_frame.grid(row=1, column=0, padx=10, pady=10, sticky="nsew", columnspan=3)
 
+        destinies_list = []
+        for item in log.places_to_visit:
+            destinies_list.append(item["name"])
 
-        self.destinos_frame = DropdownList(self, "Seleccionar destino:", destinos=["Paraguay", "Boleita", "Parque del Este"])
+        self.destinos_frame = DropdownList(self, "Seleccionar destino:", destinos=destinies_list)
         self.destinos_frame.grid(row=2, column=0, padx=10, pady=10, sticky="sew")
 
 
@@ -186,17 +207,28 @@ class PantallaPrincipal(customtkinter.CTk):
         self.start_button.grid(row=2, column=2, padx=10, pady=10, sticky="nse")
 
     def empezar_callback(self):
-        # estos son unos caaminos dummy, falta conectar con dijkstra
-        camino_javier = [(7,0),(13,7),(19,10),(25,16)]
-        camino_andreina = [(14,0),(20,7),(21,16),(27,23),(33,32)]
-        self.canvas_frame.andreina_movement = camino_andreina
-        self.canvas_frame.javier_movement = camino_javier
-        self.canvas_frame.movement2()
-        self.canvas_frame.movement1()
         
+        destino = self.destinos_frame.get_selected_destiny()
+        nodo = self.diccionario[destino]
+        log.get_shortest_path(nodo)
+
+        self.canvas_frame.andreina_movement = log.result_path_andreina
+        self.canvas_frame.javier_movement = log.result_path_javier
+
+        if (log.result_path_javier[0][1] != 0):
+            javier_delay = log.result_path_javier[0][1] * 1000
+            self.after(javier_delay, self.canvas_frame.movement1)
+            self.canvas_frame.movement2()
+        elif (log.result_path_andreina[0][1] != 0):
+            andreina_delay = log.result_path_andreina[0][1] * 1000
+            self.canvas_frame.movement1()
+            self.after(andreina_delay, self.canvas_frame.movement2)
+        else:
+            self.canvas_frame.movement2()
+            self.canvas_frame.movement1()
     
     def reiniciar_callback(self):
-        print("TODO")
+        self.canvas_frame.reset_ui()
 
     def new_destiny_callback(self):
         print("TODO")
