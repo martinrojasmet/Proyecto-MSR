@@ -17,8 +17,7 @@ class logic:
     def add_place_to_visit(self, name, carrera, calle):
         node = (abs(calle - 55)* 6) + abs(carrera - 15)
         result = {"name": name, "node": node}
-
-        self.places_to_visit.append(result)
+        return result
 
     # Determinar el que tome menos tiempo y cuanto
     def get_difference_time(self, result_table_javier, result_table_andreina, destination):
