@@ -100,6 +100,7 @@ class CanvasPrincipal(customtkinter.CTkCanvas):
         self.counter = 0
 
         self.stopped = True
+        self.done = False
 
         self.steps1 = 0
         self.steps2 = 0
@@ -220,6 +221,7 @@ class CanvasPrincipal(customtkinter.CTkCanvas):
                     self.after(1000, self.movement2)
         else:
             self.stopped = True
+            self.done = True
             self.after_cancel(self.movement2)
     
     def reset_ui(self):
@@ -275,7 +277,7 @@ class PantallaPrincipal(customtkinter.CTk):
 
     def empezar_callback(self):
 
-        if (self.canvas_frame.stopped):
+        if (self.canvas_frame.stopped and not self.canvas_frame.done):
 
             self.canvas_frame.stopped = False
             
@@ -299,7 +301,9 @@ class PantallaPrincipal(customtkinter.CTk):
                 self.canvas_frame.movement1()
     
     def reiniciar_callback(self):
-        self.canvas_frame.reset_ui()
+        if (self.canvas_frame.done):
+            self.canvas_frame.done = False
+            self.canvas_frame.reset_ui()
 
     def new_destiny_callback(self):
         nombre = self.new_destiny_input.nombre_input.get()
