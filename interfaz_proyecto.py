@@ -2,7 +2,6 @@ import customtkinter
 
 from logic import logic
 
-
 log = logic()
 
 class DropdownList(customtkinter.CTkFrame):
@@ -231,6 +230,22 @@ class CanvasPrincipal(customtkinter.CTkCanvas):
             self.javier = self.create_aa_circle(self.get_row_position(1), self.get_column_position(1), 30, fill="blue", tags="javier")
             self.andreina = self.create_aa_circle(self.get_row_position(2), self.get_column_position(3), 30, fill="pink", tags="andreina")
 
+class ShowPaths(customtkinter.CTkFrame):
+    def __init__(self, master):
+        super().__init__(master)
+
+        self.javier_path_label = customtkinter.CTkLabel(self, text="Camino Javier: ")
+        self.javier_path_label.grid(row=0, column=0, padx=10, pady=5)
+
+        self.javier_path = customtkinter.CTkLabel(self, text="[]")
+        self.javier_path.grid(row=0, column=1, padx=10, pady=5)
+
+        self.andreina_path_label = customtkinter.CTkLabel(self, text="Camino Andreina: ")
+        self.andreina_path_label.grid(row=1, column=0, padx=10, pady=5)
+
+        self.andreina_path = customtkinter.CTkLabel(self, text="[]")
+        self.andreina_path.grid(row=1, column=1, padx=10, pady=5)
+
 class PantallaPrincipal(customtkinter.CTk):
 
     diccionario = {
@@ -249,17 +264,20 @@ class PantallaPrincipal(customtkinter.CTk):
         self.grid_rowconfigure(2, weight=1)
         self.grid_columnconfigure((0,1), weight=1)
 
+        self.show_paths_frame = ShowPaths(self)
+        self.show_paths_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsw")
+
         self.new_destiny_input = NewDestinyFrame(self)
-        self.new_destiny_input.grid(row=0, column=0, padx=10, pady=10, sticky="nsw")
+        self.new_destiny_input.grid(row=0, column=1, padx=10, pady=10, sticky="nse")
 
         self.new_destiny_button = customtkinter.CTkButton(self, text="Añadir destino", font=("Arial", 24), command=self.new_destiny_callback)
-        self.new_destiny_button.grid(row=0, column=1, padx=10, pady=10, sticky="nse", rowspan=2)
+        self.new_destiny_button.grid(row=0, column=2, padx=10, pady=10, sticky="nse", rowspan=2)
 
         self.exit_button = customtkinter.CTkButton(self, text="Salir", font=("Arial", 24), command=self.close_window)
-        self.exit_button.grid(row=0, column=2, padx=10, pady=10, sticky="nse", rowspan=2)
+        self.exit_button.grid(row=0, column=3, padx=10, pady=10, sticky="nse", rowspan=2)
 
         self.canvas_frame = CanvasPrincipal(self)
-        self.canvas_frame.grid(row=2, column=0, padx=10, pady=10, sticky="nsew", columnspan=3)
+        self.canvas_frame.grid(row=2, column=0, padx=10, pady=10, sticky="nsew", columnspan=4)
 
         destinies_list = []
         for item in log.places_to_visit:
@@ -270,10 +288,10 @@ class PantallaPrincipal(customtkinter.CTk):
 
 
         self.restart_button = customtkinter.CTkButton(self, text="Reiniciar", font=("Arial", 24), command=self.reiniciar_callback)
-        self.restart_button.grid(row=3, column=1, padx=10, pady=10, sticky="nse")
+        self.restart_button.grid(row=3, column=2, padx=10, pady=10, sticky="nse")
 
         self.start_button = customtkinter.CTkButton(self, text="Empezar", font=("Arial", 24), command=self.empezar_callback)
-        self.start_button.grid(row=3, column=2, padx=10, pady=10, sticky="nse")
+        self.start_button.grid(row=3, column=3, padx=10, pady=10, sticky="nse")
 
     def empezar_callback(self):
 
@@ -284,6 +302,9 @@ class PantallaPrincipal(customtkinter.CTk):
             destino = self.destinos_frame.get_selected_destiny()
             nodo = self.diccionario[destino]
             log.get_shortest_path(nodo)
+
+            self.show_paths_frame.javier_path.configure(text=log.result_path_javier)
+            self.show_paths_frame.andreina_path.configure(text=log.result_path_andreina)
 
             self.canvas_frame.andreina_movement = log.result_path_andreina
             self.canvas_frame.javier_movement = log.result_path_javier
@@ -302,27 +323,30 @@ class PantallaPrincipal(customtkinter.CTk):
     
     def reiniciar_callback(self):
         if (self.canvas_frame.done):
+            self.show_paths_frame.javier_path.configure(text="[]")
+            self.show_paths_frame.andreina_path.configure(text="[]")
             self.canvas_frame.done = False
             self.canvas_frame.reset_ui()
 
     def new_destiny_callback(self):
-        nombre = self.new_destiny_input.nombre_input.get()
-        carrera = int(self.new_destiny_input.carrera.cget("text"))
-        calle = int(self.new_destiny_input.calle.cget("text"))
+        if (self.canvas_frame.stopped):
+            nombre = self.new_destiny_input.nombre_input.get()
+            carrera = int(self.new_destiny_input.carrera.cget("text"))
+            calle = int(self.new_destiny_input.calle.cget("text"))
 
-        if (nombre != ""):
-            destino = log.add_place_to_visit(name=nombre, carrera=carrera, calle=calle)
-            destino_ya_existe = False
-            for item in self.diccionario:
-                if (self.diccionario[item] == destino["node"]):
-                    destino_ya_existe = True
-                else:
-                    pass
-            if (not destino_ya_existe):
-                log.places_to_visit.append(destino)
-                self.diccionario[nombre] = destino["node"]
-                self.destinos_frame.add_new_value(nombre)
-                self.new_destiny_input.reset_frame()
+            if (nombre != ""):
+                destino = log.add_place_to_visit(name=nombre, carrera=carrera, calle=calle)
+                destino_ya_existe = False
+                for item in self.diccionario:
+                    if (self.diccionario[item] == destino["node"]):
+                        destino_ya_existe = True
+                    else:
+                        pass
+                if (not destino_ya_existe):
+                    log.places_to_visit.append(destino)
+                    self.diccionario[nombre] = destino["node"]
+                    self.destinos_frame.add_new_value(nombre)
+                    self.new_destiny_input.reset_frame()
 
 
     def close_window(self):
