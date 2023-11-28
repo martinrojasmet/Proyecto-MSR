@@ -1,7 +1,7 @@
 import sys
 sys.path.insert(0, 'data/')
 from global_variables import graph, number_nodes, house_javier, weight1_javier, weight2_javier, weight3_javier, house_andreina, weight1_andreina, weight2_andreina, weight3_andreina, DTD, BLP, CMR, CF
-
+import copy
 from dijkstra import dijkstra
 
 class logic:
@@ -171,7 +171,7 @@ class logic:
         # Cambiar el recorrido del que tenga menor costo
         new_result_dijkstra = None
         if crash_first != -1:
-            modified_graph = graph
+            modified_graph = copy.deepcopy(graph)
             modified_graph[crash_first][crash_second] = 4
             if is_javier:
                 new_result_dijkstra = self.dijkstra.run(modified_graph, True)
@@ -194,5 +194,16 @@ class logic:
         self.result_node = node_number
         self.result_time_difference = [time_difference, is_javier]
 
-        print(self.result_path_javier)
-        print(self.result_path_andreina)
+        # print(self.result_path_javier)
+        # print(self.result_path_andreina)
+        # print(graph)
+        # print("---------------------")
+        # print(modified_graph)
+        # print("=============================")
+
+    def reset_values(self):
+        self.result_node = -1
+        self.result_path_javier = -1
+        self.result_path_andreina = -1
+        self.result_time_difference = [-1, -1]
+        self.dijkstra.last_result_table = {}
