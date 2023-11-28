@@ -17,7 +17,7 @@ def main():
     # print(dijkstral.run(modified_graph, False))
 
     log = logic()
-    log.run()
+    log.get_shortest_path(5)
 
     # print(dijkstral.get_path(dijkstral.run(modified_graph, False), 31))
     # dijkstral.get_path(dijkstral.run(modified_graph, False), 31)
