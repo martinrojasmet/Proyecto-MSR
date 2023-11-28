@@ -22,5 +22,6 @@ def main():
     # print(dijkstral.get_path(dijkstral.run(modified_graph, False), 31))
     # dijkstral.get_path(dijkstral.run(modified_graph, False), 31)
     # dijkstral.print_last_result_table()
+
     
 main()
