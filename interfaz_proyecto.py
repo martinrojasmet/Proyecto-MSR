@@ -113,7 +113,7 @@ class CanvasPrincipal(customtkinter.CTkCanvas):
                     arc1 = self.create_line(self.get_row_position(j), self.get_column_position(i), self.get_row_position(j), self.get_column_position(i+1), width=8)
                 if (j != 5):
                     arc2 = self.create_line(self.get_row_position(j), self.get_column_position(i), self.get_row_position(j+1), self.get_column_position(i), width=8)
-                node = self.create_aa_circle(self.get_row_position(j), self.get_column_position(i), 40)
+                node = self.create_aa_circle(self.get_row_position(j), self.get_column_position(i), 40, tags=f"{self.counter}")
                 self.nodeList.append(node)
                 self.create_text(self.get_row_position(j),  self.get_column_position(i), font=("Arial", 18), text=f"{self.counter}")
                 self.counter = self.counter + 1
@@ -221,6 +221,7 @@ class CanvasPrincipal(customtkinter.CTkCanvas):
         else:
             self.stopped = True
             self.done = True
+            self.itemconfigure(self.nodeList[self.andreina_movement[0][0]], fill="white")
             self.after_cancel(self.movement2)
     
     def reset_ui(self):
@@ -301,6 +302,8 @@ class PantallaPrincipal(customtkinter.CTk):
             
             destino = self.destinos_frame.get_selected_destiny()
             nodo = self.diccionario[destino]
+            nodo_ui = self.canvas_frame.nodeList[nodo]
+            self.canvas_frame.itemconfigure(nodo_ui, fill="yellow")
             log.get_shortest_path(nodo)
 
             self.show_paths_frame.javier_path.configure(text=log.result_path_javier)
