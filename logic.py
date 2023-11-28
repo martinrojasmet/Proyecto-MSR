@@ -194,5 +194,16 @@ class logic:
         self.result_node = node_number
         self.result_time_difference = [time_difference, is_javier]
 
-        print(self.result_path_javier)
-        print(self.result_path_andreina)
+        # print(self.result_path_javier)
+        # print(self.result_path_andreina)
+        # print(graph)
+        # print("---------------------")
+        # print(modified_graph)
+        # print("=============================")
+
+    def reset_values(self):
+        self.result_node = -1
+        self.result_path_javier = -1
+        self.result_path_andreina = -1
+        self.result_time_difference = [-1, -1]
+        self.dijkstra.last_result_table = {}

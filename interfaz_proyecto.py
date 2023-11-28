@@ -136,10 +136,10 @@ class CanvasPrincipal(customtkinter.CTkCanvas):
                 if ((self.steps1 + 1) == velocity):
                     self.steps1 = 0
                     self.javier_movement.pop(0)
-                    self.after(1000, self.movement1)
+                    self.after(500, self.movement1)
                 else:
                     self.steps1 += 1
-                    self.after(1000, self.movement1)
+                    self.after(500, self.movement1)
 
             elif (direction == -6):
                 step_rate = 140 / velocity
@@ -147,30 +147,30 @@ class CanvasPrincipal(customtkinter.CTkCanvas):
                 if ((self.steps1 + 1) == velocity):
                     self.steps1 = 0
                     self.javier_movement.pop(0)
-                    self.after(1000, self.movement1)
+                    self.after(500, self.movement1)
                 else:
                     self.steps1 += 1
-                    self.after(1000, self.movement1)
+                    self.after(500, self.movement1)
             elif (direction == 1):
                 step_rate = 335 / velocity
                 self.move(self.javier, step_rate, 0)
                 if ((self.steps1 + 1) == velocity):
                     self.steps1 = 0
                     self.javier_movement.pop(0)
-                    self.after(1000, self.movement1)
+                    self.after(500, self.movement1)
                 else:
                     self.steps1 += 1
-                    self.after(1000, self.movement1)
+                    self.after(500, self.movement1)
             elif (direction == -1):
                 step_rate = 335 / velocity
                 self.move(self.javier, - step_rate, 0)
                 if ((self.steps1 + 1) == velocity):
                     self.steps1 = 0
                     self.javier_movement.pop(0)
-                    self.after(1000, self.movement1)
+                    self.after(500, self.movement1)
                 else:
                     self.steps1 += 1
-                    self.after(1000, self.movement1)
+                    self.after(500, self.movement1)
         else:
             self.after_cancel(self.movement1)
 
@@ -183,10 +183,10 @@ class CanvasPrincipal(customtkinter.CTkCanvas):
                 if ((self.steps2 + 1) == velocity):
                     self.steps2 = 0
                     self.andreina_movement.pop(0)
-                    self.after(1000, self.movement2)
+                    self.after(500, self.movement2)
                 else:
                     self.steps2 += 1
-                    self.after(1000, self.movement2)
+                    self.after(500, self.movement2)
 
             elif (direction == -6):
                 step_rate = 140 / velocity
@@ -194,30 +194,30 @@ class CanvasPrincipal(customtkinter.CTkCanvas):
                 if ((self.steps2 + 1) == velocity):
                     self.steps2 = 0
                     self.andreina_movement.pop(0)
-                    self.after(1000, self.movement2)
+                    self.after(500, self.movement2)
                 else:
                     self.steps2 += 1
-                    self.after(1000, self.movement2)
+                    self.after(500, self.movement2)
             elif (direction == 1):
                 step_rate = 335 / velocity
                 self.move(self.andreina, step_rate, 0)
                 if ((self.steps2 + 1) == velocity):
                     self.steps2 = 0
                     self.andreina_movement.pop(0)
-                    self.after(1000, self.movement2)
+                    self.after(500, self.movement2)
                 else:
                     self.steps2 += 1
-                    self.after(1000, self.movement2)
+                    self.after(500, self.movement2)
             elif (direction == -1):
                 step_rate = 335 / velocity
                 self.move(self.andreina, - step_rate, 0)
                 if ((self.steps2 + 1) == velocity):
                     self.steps2 = 0
                     self.andreina_movement.pop(0)
-                    self.after(1000, self.movement2)
+                    self.after(500, self.movement2)
                 else:
                     self.steps2 += 1
-                    self.after(1000, self.movement2)
+                    self.after(500, self.movement2)
         else:
             self.stopped = True
             self.done = True
@@ -304,6 +304,7 @@ class PantallaPrincipal(customtkinter.CTk):
             nodo = self.diccionario[destino]
             nodo_ui = self.canvas_frame.nodeList[nodo]
             self.canvas_frame.itemconfigure(nodo_ui, fill="yellow")
+
             log.get_shortest_path(nodo)
 
             self.show_paths_frame.javier_path.configure(text=log.result_path_javier)
@@ -313,11 +314,11 @@ class PantallaPrincipal(customtkinter.CTk):
             self.canvas_frame.javier_movement = log.result_path_javier
 
             if (log.result_path_javier[0][1] != 0):
-                javier_delay = log.result_path_javier[0][1] * 1000
+                javier_delay = log.result_path_javier[0][1] * 500
                 self.after(javier_delay, self.canvas_frame.movement1)
                 self.canvas_frame.movement2()
             elif (log.result_path_andreina[0][1] != 0):
-                andreina_delay = log.result_path_andreina[0][1] * 1000
+                andreina_delay = log.result_path_andreina[0][1] * 500
                 self.canvas_frame.movement1()
                 self.after(andreina_delay, self.canvas_frame.movement2)
             else:
@@ -326,6 +327,7 @@ class PantallaPrincipal(customtkinter.CTk):
     
     def reiniciar_callback(self):
         if (self.canvas_frame.done):
+            log.reset_values()
             self.show_paths_frame.javier_path.configure(text="[]")
             self.show_paths_frame.andreina_path.configure(text="[]")
             self.canvas_frame.done = False
