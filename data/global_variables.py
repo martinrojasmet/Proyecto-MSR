@@ -55,7 +55,7 @@ weight3_andreina = 12
 weight4 = 1005
 
 # Info. Lugares
-DTD = {"name": "Discoteca The Darkness", "node": 11}
+DTD = {"name": "Discoteca The Darkness", "node": 10}
 BLP = {"name": "Bar La Pasión", "node": 31}
 CMR = {"name": "Cervecería Mi Rolita", "node": 33}
 CF = {"name": "Café Sensación", "node": 35}
